@@ -55,7 +55,7 @@ def intrinsic(fac: Facility, fwd: pd.Series, rate: float = 0.0, offset_days: int
     d = discount_factors(n, rate, offset_days)
     # variables x = [inj_0..inj_{n-1}, wd_0..wd_{n-1}]; maximise sum d*(f*(wd - inj) - costs)
     c = np.concatenate([d * (f + fac.inj_cost), -d * (f - fac.wd_cost)])
-    cum = sparse.tril(np.ones((n, n)), format="csr")
+    cum = sparse.csr_matrix(np.tril(np.ones((n, n))))
     a_inv = sparse.hstack([cum, -cum], format="csr")       # inventory change after each day
     v0 = fac.start_fill * fac.wgv
     a_ub = sparse.vstack([a_inv, -a_inv], format="csr")

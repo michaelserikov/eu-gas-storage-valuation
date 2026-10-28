@@ -58,7 +58,7 @@ def deliverability(storage: pd.DataFrame, bins: int = 20, q: float = 0.99) -> pd
     """Maximum observed withdrawal (GWh/d) by fill level (percent bins), made non-decreasing."""
     df = storage[["full", "withdrawal"]].dropna()
     edges = np.linspace(0, 100, bins + 1)
-    cap = df.groupby(pd.cut(df["full"], edges))["withdrawal"].quantile(q)
+    cap = df.groupby(pd.cut(df["full"], edges), observed=False)["withdrawal"].quantile(q)
     cap.index = edges[1:]
     # below the lowest observed fill, fall linearly to zero at an empty storage
     first = cap.first_valid_index()
