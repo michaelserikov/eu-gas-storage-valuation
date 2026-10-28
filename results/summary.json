@@ -1,0 +1,33 @@
+{
+  "valuation_date": "2026-10-28",
+  "anchor_month": "2026-11",
+  "anchor_price": 99.9,
+  "storage_year": "2027-04-01 to 2028-04-01",
+  "facility": {
+    "wgv": 1000000.0,
+    "inj_days": 150,
+    "wd_days": 75,
+    "inj_cost": 0.25,
+    "wd_cost": 0.1,
+    "start_fill": 0.0,
+    "end_fill": 0.0
+  },
+  "discount_rate": 0.025,
+  "paths": 8000,
+  "paths_sensitivity": 2000,
+  "ou_base": {
+    "kappa": 2.922,
+    "sigma": 0.743
+  },
+  "value_eur_per_mwh_wgv": {
+    "intrinsic": 24.146,
+    "total": 29.376,
+    "extrinsic": 5.23,
+    "std_error": 0.26
+  },
+  "backtest_sum_eur_per_mwh_wgv": {
+    "perfect_foresight": 247.64,
+    "calendar_rule": 28.83,
+    "lsmc_policy": 11.51
+  }
+}

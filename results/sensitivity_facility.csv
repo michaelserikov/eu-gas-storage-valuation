@@ -1,0 +1,4 @@
+facility,intrinsic,total,extrinsic,std_error
+seasonal 150/75 days,24.146,29.147,5.0,0.529
+medium 60/30 days,28.217,36.861,8.643,0.58
+fast-cycle 20/10 days,28.621,43.642,15.021,0.575
