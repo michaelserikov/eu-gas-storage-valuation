@@ -1,0 +1,87 @@
+{
+  "start_day": "2026-10-28",
+  "start_fill_pct": 61.73,
+  "wgv_twh": 247.4,
+  "fit_winters": [
+    "2022/2023",
+    "2023/2024",
+    "2024/2025",
+    "2025/2026"
+  ],
+  "hdd_slope_gwh_d": 173.4,
+  "scenarios": {
+    "as observed": {
+      "n": 140,
+      "fill_1_feb": {
+        "p5": 11.8,
+        "p25": 15.3,
+        "p50": 23.4,
+        "p75": 32.4,
+        "p95": 39.9
+      },
+      "fill_31_march": {
+        "p5": 1.9,
+        "p25": 4.2,
+        "p50": 7.4,
+        "p75": 13.7,
+        "p95": 28.6
+      },
+      "prob_31_march_below": {
+        "30%": 0.964,
+        "20%": 0.871,
+        "10%": 0.621
+      }
+    },
+    "today's climate": {
+      "n": 140,
+      "fill_1_feb": {
+        "p5": 13.6,
+        "p25": 21.1,
+        "p50": 29.1,
+        "p75": 38.4,
+        "p95": 46.1
+      },
+      "fill_31_march": {
+        "p5": 3.5,
+        "p25": 6.8,
+        "p50": 14.1,
+        "p75": 22.8,
+        "p95": 35.3
+      },
+      "prob_31_march_below": {
+        "30%": 0.879,
+        "20%": 0.664,
+        "10%": 0.386
+      }
+    }
+  },
+  "coldest_5_today": [
+    {
+      "weather_year": "1995/96",
+      "winter_mean_t": 1.84,
+      "fill_31_march": 2.9
+    },
+    {
+      "weather_year": "2012/13",
+      "winter_mean_t": 2.37,
+      "fill_31_march": 4.45
+    },
+    {
+      "weather_year": "2005/06",
+      "winter_mean_t": 2.65,
+      "fill_31_march": 5.65
+    },
+    {
+      "weather_year": "2009/10",
+      "winter_mean_t": 2.86,
+      "fill_31_march": 7.4
+    },
+    {
+      "weather_year": "2010/11",
+      "winter_mean_t": 2.9,
+      "fill_31_march": 4.95
+    }
+  ],
+  "held_out_mae_gwh_d": 352.1,
+  "held_out_mae_no_weather_gwh_d": 616.7
+}

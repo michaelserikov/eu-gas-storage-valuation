@@ -5,6 +5,8 @@ winter spread you can lock in today (intrinsic) and how much is the option to re
 (extrinsic)? And what would the storage actually have earned in the gas years 2019/20 to 2025/26,
 through the 2021-2022 gas crisis? A research study on open TTF price data with a linear program for
 the intrinsic value and least-squares Monte Carlo for the full value.
+v0.2 adds the fundamentals: how fast does German storage empty with the weather, and where can it
+stand on 31 March 2027 after a fill of only 62% at the end of October 2026?
 
 Related: [de-power-market-ppa](https://github.com/michaelserikov/de-power-market-ppa), where German
 power, gas and carbon prices are cointegrated, and
@@ -97,8 +99,55 @@ complete gas years from 2018/19 and negative in 2022/23 (-25.7 EUR/MWh) and 2025
 ![Intrinsic schedule](figures/intrinsic_schedule.png)
 ![Realised seasonal spread](figures/realised_seasonal_spread.png)
 
+### v0.2: German storage fundamentals and the coming winter
+
+Daily net withdrawal from German storage (GIE AGSI+) against population-weighted heating degree
+days (ERA5), fitted on the four heating seasons since Russian pipeline supply ended (2022/23 to
+2025/26). Each extra heating degree day raises withdrawal by 173 GWh/d (same and previous day);
+weekends are 437 GWh/d lower.
+
+| Held-out winter | Daily error (GWh/d) | ... without weather | Fill 31 March: actual | model | without weather |
+|---|---|---|---|---|---|
+| 2022/23 | 394 | 709 | 64.1 | 46.6 | 42.3 |
+| 2023/24 | 267 | 574 | 62.8 | 58.1 | 47.4 |
+| 2024/25 | 425 | 616 | 28.7 | 53.1 | 57.9 |
+| 2025/26 | 322 | 568 | 22.2 | 19.6 | 31.8 |
+
+Each winter is predicted by a model fitted on the other three, from its real fill on 15 October
+with its real weather. Weather halves the daily error (352 against 617 GWh/d) and cuts the mean
+error of the 31 March fill from 19.0 to 12.3 percentage points. The rest is supply: in 2024/25
+the model missed by 24 points.
+
+**Scenarios for winter 2026/27.** On 27 October 2026 German storage held 152.7 TWh, 61.7% of its
+247.4 TWh working volume, below the 1 November level of every year since 2012 (lowest before:
+72.7% in 2021). The temperatures of all 35 winters 1991/92 to 2025/26, shifted to today's climate
+by the warming trend, are run through the model with the residuals of each of the four fitted
+winters (140 scenarios), and withdrawal is capped by the deliverability observed at each fill.
+
+| Fill (%) | 5% | 25% | Median | 75% | 95% |
+|---|---|---|---|---|---|
+| 1 February 2027 | 13.6 | 21.1 | 29.1 | 38.4 | 46.1 |
+| 31 March 2027 | 3.5 | 6.8 | 14.1 | 22.8 | 35.3 |
+
+- With the supply of the last four winters and no price response, storage ends the winter below
+  30% in 88% of scenarios, below 20% in 66% and below 10% in 39%. Replaying the cold winter of
+  1995/96 leaves 2.9%.
+- Supply matters as much as weather: with the residuals of 2022/23 the median ends at 26.5%, with
+  those of 2024/25 at 5.7%.
+- Without the warming adjustment (temperatures as observed) the median falls to 7.4%.
+- The scenarios hold prices and supply behaviour fixed, so they describe the gap the market has to
+  close with more LNG imports or lower demand, not a forecast. A high winter price is how that gap
+  closes; the TTF front month stood near 100 EUR/MWh on the valuation date.
+
+![Storage scenarios](figures/storage_fill_scenarios.png)
+
 ## Model
 
+- **Storage and weather (v0.2):** GIE AGSI+ daily data for Germany (free API key); daily mean
+  2 m temperature from ERA5 via the Open-Meteo archive at the ten largest cities, weighted by
+  population; heating degree days 18 - T below 15 C (Eurostat). Ordinary least squares with month
+  effects; deliverability is the 99th percentile of observed withdrawal in 5% fill bins, falling
+  linearly to zero below the lowest observed fill.
 - **Prices:** daily closes of the continuous TTF front-month future (Yahoo Finance, TTF=F, from
   October 2017), used as a spot proxy: on each day it is the price for delivery next month.
 - **Seasonal shape:** log price minus a centred one-year rolling mean, averaged by delivery month,
@@ -126,12 +175,14 @@ complete gas years from 2018/19 and negative in 2022/23 (-25.7 EUR/MWh) and 2025
   price factor only; real curves move in level and in spread separately.
 - Constant injection and withdrawal rates (no ratchets that depend on the fill level), no
   capacity cost, no bid-ask spread or market impact, no storage regulation (fill-level targets).
-- Illustrative research study on public data; not a commercial valuation.
+- v0.2 has no price feedback, one country and no cross-border storage use (German storage also
+  serves neighbours); the supply regime is estimated from four winters only.
+- Illustrative research study on public data; not a commercial valuation or supply forecast.
 
 ## Next
 
-- v0.2: fundamentals with GIE AGSI+ storage and ALSI LNG data, ENTSOG flows and ERA5 heating
-  degree days: a weather-driven withdrawal model and fill-level trajectories for the winter.
+- LNG send-out (GIE ALSI) and pipeline flows (ENTSOG) as explicit supply terms, and the link from
+  the storage outlook to the winter-summer spread.
 - v0.3: rolling intrinsic and a hedged backtest, fill-dependent ratchets, two-factor spot model.
 
 ## Run
@@ -140,4 +191,6 @@ complete gas years from 2018/19 and negative in 2022/23 (-25.7 EUR/MWh) and 2025
 pip install -e ".[test]"
 pytest -q                  # offline, synthetic data
 python -m gasstor.run      # downloads TTF prices, writes results/ and figures/ (about 10 minutes)
+export AGSI_KEY=...        # free key from agsi.gie.eu
+python -m gasstor.fundamentals_run   # storage model and winter scenarios (results/fundamentals/)
 ```

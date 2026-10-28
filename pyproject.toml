@@ -1,6 +1,6 @@
 [project]
 name = "gasstor"
-version = "0.1.0"
+version = "0.2.0"
 description = "European gas: TTF seasonality and the intrinsic and extrinsic value of seasonal gas storage"
 requires-python = ">=3.11"
 dependencies = [
